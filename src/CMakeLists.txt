@@ -52,3 +52,27 @@ set_target_properties(dsps
   VERSION ${PROJECT_VERSION}
   SOVERSION ${PROJECT_VERSION_MAJOR}
 )
+
+# Include GNUInstallDirs (if Unix system)
+if(UNIX)
+  include(GNUInstallDirs)
+endif()
+
+# Rules for install
+install(
+  TARGETS dsps
+  EXPORT dspsConfig
+  LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
+)
+
+install(DIRECTORY ${CMAKE_SOURCE_DIR}/include/dsps
+  DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}
+  FILES_MATCHING
+  PATTERN "*.h"
+  PATTERN ".swp" EXCLUDE
+)
+
+install(
+  EXPORT dspsConfig
+  DESTINATION "${CMAKE_INSTALL_LIBDIR}/cmake/dsps"
+)
