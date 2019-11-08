@@ -48,5 +48,27 @@ endif()
 # Common depends
 find_package(dsac REQUIRED)
 
-add_subdirectory(src)
+add_subdirectory("src")
 
+# Include GNUInstallDirs (if Unix system)
+if(UNIX)
+  include(GNUInstallDirs)
+endif()
+
+# Rules for install
+install(
+  TARGETS dsps
+  LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
+)
+
+install(DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/include/
+  DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}
+  FILES_MATCHING
+  PATTERN "*.h"
+  PATTERN ".swp" EXCLUDE
+)
+
+install(
+  EXPORT dspsConfig
+  DESTINATION "${CMAKE_INSTALL_LIBDIR}/cmake/dsps"
+)
