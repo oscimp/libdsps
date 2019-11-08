@@ -35,17 +35,17 @@ Available Options
 -----------------
 
 - DSPS_DEBUG: Enable the debug build type
-- DSPS_TESTS: Enable the tests suite
+- DSPS_TESTS: Enable the test suite
 - DSPS_EXAMPLES: Compile some examples using libdsps
 
-To use a option use this command by example
+Options are used with the -D flag, for example
 ```sh
 cmake -DDSPS_DEBUG=ON|OFF ..
 ```
 
 Run tests
 =========
-For un the unit tests, you must execute:
+Running the unit tests is achieved by executing:
 ```sh
 git submodule update --init
 mkdir build
