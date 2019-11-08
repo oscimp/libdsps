@@ -45,6 +45,14 @@ if (DSPS_EXAMPLES)
   add_subdirectory(example)
 endif()
 
+# Documentation
+find_package(Doxygen)
+
+if(DOXYGEN_FOUND)
+  configure_file("${CMAKE_SOURCE_DIR}/Doxyfile.cmake" "${CMAKE_BINARY_DIR}/Doxyfile" @ONLY)
+  add_custom_target(doc ${DOXYGEN_EXECUTABLE} "${CMAKE_BINARY_DIR}/Doxyfile")
+endif(DOXYGEN_FOUND)
+
 # Common depends
 find_package(dsac REQUIRED)
 

@@ -11,7 +11,7 @@ You have to install the following dependencies:
 - [FFTW3](http://www.fftw.org/)
 - [CMake](https://cmake.org/) >= 3.1
 - [Boost](http://www.boost.org/)
-- [libdsac](https://lxsd.femto-st.fr/gitlab/ahugeat/libdsac)
+- [libdsac](https://github.com/oscimp/libdsac)
 
 For Debian/Ubuntu:
 
@@ -22,7 +22,7 @@ apt-get install libfftw3-dev libboost-all-dev cmake
 Then:
 
 ```sh
-git clone https://lxsd.femto-st.fr/gitlab/ahugeat/libdsps.git
+git clone https://github.com/oscimp/libdsps.git
 cd dsps_lib
 mkdir build
 cd build
