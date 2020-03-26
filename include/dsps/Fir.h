@@ -27,7 +27,7 @@ template<typename T>
 class Fir: public Task {
 public:
     /// Constructor
-    Fir(const std::string &coeffPath, const std::uint64_t DECIM_FACTOR);
+    Fir(const std::string &coeffPath, const std::uint64_t DECIM_FACTOR, const int64_t maxNOB = 0);
 
     /// \brief Filter the signal
     /// This is an override of Task::compute.
@@ -56,6 +56,7 @@ private:
     std::vector<T> m_coeff;
     std::uint64_t m_DECIM_FACTOR;
     std::vector<T> m_inputBuffer;
+    uint64_t m_maxNOB;
 };
 
 #endif // FIR_H

@@ -1,20 +1,3 @@
-/* DSPS - library to build a digital signal processing simulation
- * Copyright (C) 2019  Arthur HUGEAT
- *
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with this program.  If not, see <https://www.gnu.org/licenses/>
- */
-
 #include <dsps/Fir.h>
 
 #include <cstring>
@@ -22,14 +5,15 @@
 #include <iostream>
 #include <typeinfo>
 
-#include <dsac/fir.h>
+#include <dsa/fir.h>
 
 #include <dsps/Channel.h>
 
 template<typename T>
-Fir<T>::Fir(const std::string &coeffPath, const std::uint64_t DECIM_FACTOR)
+Fir<T>::Fir(const std::string &coeffPath, const std::uint64_t DECIM_FACTOR, const int64_t maxNOB)
 : Task(getChannelType<T>(), 1, getChannelType<T>(), 1)
-, m_DECIM_FACTOR(DECIM_FACTOR) {
+, m_DECIM_FACTOR(DECIM_FACTOR)
+, m_maxNOB(maxNOB) {
     // Load the coefficients
     std::ifstream inFile;
     inFile.open(coeffPath);
@@ -69,7 +53,6 @@ void Fir<T>::compute(const std::uint64_t N) {
     // Call the right method
     filter(outValues, INPUT_SIZE);
 
-    // Send result
     m_outputChannels[0].send(outValues);
 
     // Clear input data
@@ -105,6 +88,16 @@ template<>
 void Fir<std::int64_t>::filter(std::vector<std::int64_t> &outValues, const std::uint64_t INPUT_SIZE) {
     // Compute the fir
     fir_int64(m_inputBuffer.data(), INPUT_SIZE, m_coeff.data(), m_coeff.size(), m_DECIM_FACTOR, outValues.data());
+
+    // Send result
+    if (m_maxNOB > 0) {
+      uint64_t dataSize = sizeof(int64_t) * 8;
+      assert(m_maxNOB < dataSize);
+      uint64_t shift = dataSize - m_maxNOB;
+      for (size_t i = 0; i < outValues.size(); ++i) {
+        outValues[i] = (outValues[i] << shift) >> shift;
+      }
+    }
 }
 
 template<typename T>
